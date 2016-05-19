@@ -5,8 +5,20 @@ set -euo pipefail
 echoerr() { cat <<< "$@" 1>&2; }
 
 if [ -n "${SSHFS:-}" ]; then
+    if [ -n "${SSHFS_IDENTITY_FILE:-}" ]; then
+        SSHFS_IDENTITY_FILE="-o IdentityFile=${SSHFS_IDENTITY_FILE}"
+    else
+        SSHFS_IDENTITY_FILE=''
+    fi
+    if [ -n "${SSHFS_PASSWORD:-}" ]; then
+        SSHFS_PASSWORD="echo ${SSHFS_PASSWORD} |"
+        SSHFS_PASSWORD_OPT='-o password_stdin'
+    else
+        SSHFS_PASSWORD=''
+        SSHFS_PASSWORD_OPT=''
+    fi
     mkdir -p /mnt/sshfs
-    sshfs "$SSHFS" /mnt/sshfs
+    eval "${SSHFS_PASSWORD} sshfs ${SSHFS} /mnt/sshfs ${SSHFS_IDENTITY_FILE} ${SSHFS_PASSWORD_OPT}"
     BORG_REPO=/mnt/sshfs
 fi
 
