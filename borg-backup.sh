@@ -29,6 +29,12 @@ fi
 
 if [ -z "${BORG_REPO:-}" ]; then
     echoerr 'Variable $BORG_REPO is required. Please set it to the repository location.'
+    exit 1
+fi
+
+if [ -z "${BACKUP_DIRS:-}" ]; then
+    echoerr 'Variable $BACKUP_DIRS is required. Please fill it with directories you would like to backup.'
+    exit 1
 fi
 
 if [ -z "${BORG_PASSPHRASE:-}" ]; then
