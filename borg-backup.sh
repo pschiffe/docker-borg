@@ -6,6 +6,11 @@ echoerr() { cat <<< "$@" 1>&2; }
 
 if [ -n "${SSHFS:-}" ]; then
     if [ -n "${SSHFS_IDENTITY_FILE:-}" ]; then
+        if [ ! -f "$SSHFS_IDENTITY_FILE" -a -n "${SSHFS_GEN_IDENTITY_FILE:-}" ]; then
+            ssh-keygen -t rsa -b 4096 -N '' -f "$SSHFS_IDENTITY_FILE"
+            cat "${SSHFS_IDENTITY_FILE}.pub"
+            exit 0
+        fi
         SSHFS_IDENTITY_FILE="-o IdentityFile=${SSHFS_IDENTITY_FILE}"
     else
         SSHFS_IDENTITY_FILE=''
