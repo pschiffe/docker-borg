@@ -44,6 +44,8 @@ else
     INIT_ENCRYPTION=''
 fi
 
+export BORG_REPO
+
 # If the $BORG_REPO is a local path and the directory is empty, init it
 if [ "${BORG_REPO:0:1}" == '/' -a ! "$(ls -A $BORG_REPO)" ]; then
     INIT_REPO=1
