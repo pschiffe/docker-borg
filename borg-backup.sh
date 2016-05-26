@@ -44,6 +44,7 @@ else
     INIT_ENCRYPTION=''
 fi
 
+# Borg just needs this
 export BORG_REPO
 
 # If the $BORG_REPO is a local path and the directory is empty, init it
@@ -64,7 +65,7 @@ else
     COMPRESSION=''
 fi
 
-borg create $COMPRESSION ::"$ARCHIVE" $BACKUP_DIRS
+borg create -v --stats $COMPRESSION ::"$ARCHIVE" $BACKUP_DIRS
 
 if [ -n "${PRUNE:-}" ]; then
     if [ -n "${PRUNE_PREFIX:-}" ]; then
@@ -82,10 +83,10 @@ if [ -n "${PRUNE:-}" ]; then
         KEEP_MONTHLY=6
     fi
 
-    borg prune $PRUNE_PREFIX --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
+    borg prune -v --stats $PRUNE_PREFIX --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
 fi
 
-borg check
+borg check -v
 
 if [ -n "${SSHFS:-}" ]; then
     fusermount -u "$BORG_REPO"
