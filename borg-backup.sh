@@ -2,11 +2,25 @@
 
 set -euo pipefail
 
-echoerr() { cat <<< "$@" 1>&2; }
+function echoerr {
+    cat <<< "$@" 1>&2;
+}
+
+function quit {
+    if [ -n "${SSHFS:-}" ]; then
+        fusermount -u "$BORG_REPO"
+    fi
+
+    if [ -n "${1:-}" ]; then
+        exit "$1"
+    fi
+
+    exit 0
+}
 
 if [ -n "${SSHFS:-}" ]; then
     if [ -n "${SSHFS_IDENTITY_FILE:-}" ]; then
-        if [ ! -f "$SSHFS_IDENTITY_FILE" -a -n "${SSHFS_GEN_IDENTITY_FILE:-}" ]; then
+        if [ ! -f "$SSHFS_IDENTITY_FILE" ] && [ -n "${SSHFS_GEN_IDENTITY_FILE:-}" ]; then
             ssh-keygen -t rsa -b 4096 -N '' -f "$SSHFS_IDENTITY_FILE"
             cat "${SSHFS_IDENTITY_FILE}.pub"
             exit 0
@@ -29,13 +43,11 @@ fi
 
 if [ -z "${BORG_REPO:-}" ]; then
     echoerr 'Variable $BORG_REPO is required. Please set it to the repository location.'
-    exit 1
+    quit 1
 fi
 
-if [ -z "${BACKUP_DIRS:-}" ]; then
-    echoerr 'Variable $BACKUP_DIRS is required. Please fill it with directories you would like to backup.'
-    exit 1
-fi
+# Borg just needs this
+export BORG_REPO
 
 if [ -z "${BORG_PASSPHRASE:-}" ]; then
     INIT_ENCRYPTION='--encryption=none'
@@ -44,11 +56,18 @@ else
     INIT_ENCRYPTION=''
 fi
 
-# Borg just needs this
-export BORG_REPO
+if [ -n "${BORG_PARAMS:-}" ]; then
+    borg $BORG_PARAMS
+    quit
+fi
+
+if [ -z "${BACKUP_DIRS:-}" ]; then
+    echoerr 'Variable $BACKUP_DIRS is required. Please fill it with directories you would like to backup.'
+    quit 1
+fi
 
 # If the $BORG_REPO is a local path and the directory is empty, init it
-if [ "${BORG_REPO:0:1}" == '/' -a ! "$(ls -A $BORG_REPO)" ]; then
+if [ "${BORG_REPO:0:1}" == '/' ] && [ ! "$(ls -A $BORG_REPO)" ]; then
     INIT_REPO=1
 fi
 
@@ -88,6 +107,4 @@ fi
 
 borg check -v
 
-if [ -n "${SSHFS:-}" ]; then
-    fusermount -u "$BORG_REPO"
-fi
+quit
