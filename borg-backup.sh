@@ -72,7 +72,7 @@ if [ "${BORG_REPO:0:1}" == '/' ] && [ ! "$(ls -A $BORG_REPO)" ]; then
 fi
 
 if [ -n "${INIT_REPO:-}" ]; then
-    borg init $INIT_ENCRYPTION
+    borg init -v --show-rc $INIT_ENCRYPTION
 fi
 
 TODAY=$(date +%Y-%m-%d)
@@ -84,7 +84,7 @@ else
     COMPRESSION=''
 fi
 
-borg create -v --stats $COMPRESSION ::"$ARCHIVE" $BACKUP_DIRS
+borg create -v --stats --show-rc $COMPRESSION ::"$ARCHIVE" $BACKUP_DIRS
 
 if [ -n "${PRUNE:-}" ]; then
     if [ -n "${PRUNE_PREFIX:-}" ]; then
@@ -102,9 +102,9 @@ if [ -n "${PRUNE:-}" ]; then
         KEEP_MONTHLY=6
     fi
 
-    borg prune -v --stats $PRUNE_PREFIX --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
+    borg prune -v --stats --show-rc $PRUNE_PREFIX --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
 fi
 
-borg check -v
+borg check -v --show-rc
 
 quit
