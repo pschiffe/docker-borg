@@ -56,6 +56,16 @@ else
     INIT_ENCRYPTION=''
 fi
 
+TODAY=$(date +%Y-%m-%d)
+ARCHIVE="${ARCHIVE:-$TODAY}"
+
+if [ -n "${EXTRACT_TO:-}" ]; then
+    mkdir -p "$EXTRACT_TO"
+    cd "$EXTRACT_TO"
+    borg extract -v --list --show-rc ::"$ARCHIVE"
+    quit
+fi
+
 if [ -n "${BORG_PARAMS:-}" ]; then
     borg $BORG_PARAMS
     quit
@@ -74,9 +84,6 @@ fi
 if [ -n "${INIT_REPO:-}" ]; then
     borg init -v --show-rc $INIT_ENCRYPTION
 fi
-
-TODAY=$(date +%Y-%m-%d)
-ARCHIVE="${ARCHIVE:-$TODAY}"
 
 if [ -n "${COMPRESSION:-}" ]; then
     COMPRESSION="--compression=${COMPRESSION}"
