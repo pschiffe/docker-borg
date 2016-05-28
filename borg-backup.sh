@@ -62,7 +62,7 @@ ARCHIVE="${ARCHIVE:-$TODAY}"
 if [ -n "${EXTRACT_TO:-}" ]; then
     mkdir -p "$EXTRACT_TO"
     cd "$EXTRACT_TO"
-    borg extract -v --list --show-rc ::"$ARCHIVE"
+    borg extract -v --list --show-rc ::"$ARCHIVE" ${EXTRACT_WHAT:-}
     quit
 fi
 
