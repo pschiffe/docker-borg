@@ -1,11 +1,11 @@
-FROM fedora:23
+FROM fedora:24
 MAINTAINER "Peter Schiffer" <pschiffe@redhat.com>
 
 RUN dnf -y --setopt=tsflags=nodocs install \
         borgbackup \
         fuse-sshfs \
-    && dnf -y clean all
+    && dnf clean all
 
-COPY borg-backup.sh /bin/
+COPY borg-backup.sh /
 
-CMD [ "borg-backup.sh" ]
+CMD [ "/borg-backup.sh" ]
