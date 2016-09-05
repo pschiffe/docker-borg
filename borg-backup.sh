@@ -91,7 +91,21 @@ else
     COMPRESSION=''
 fi
 
-borg create -v --stats --show-rc $COMPRESSION ::"$ARCHIVE" $BACKUP_DIRS
+if [ -n "${EXCLUDE:-}" ]; then
+    OLD_IFS=$IFS
+    IFS=';'
+
+    EXCLUDE_BORG=''
+    for i in $EXCLUDE; do
+        EXCLUDE_BORG="${EXCLUDE_BORG} --exclude ${i}"
+    done
+
+    IFS=$OLD_IFS
+else
+    EXCLUDE_BORG=''
+fi
+
+borg create -v --stats --show-rc $COMPRESSION $EXCLUDE_BORG ::"$ARCHIVE" $BACKUP_DIRS
 
 if [ -n "${PRUNE:-}" ]; then
     if [ -n "${PRUNE_PREFIX:-}" ]; then
