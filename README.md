@@ -13,6 +13,7 @@ docker run \
   -e BORG_REPO=/borg/repo \
   -e BORG_PASSPHRASE=my-secret-pw \
   -e BACKUP_DIRS=/borg/data \
+  -e EXCLUDE='*/.cache*;*.tmp;/borg/data/etc/shadow' \
   -e COMPRESSION=lz4 \
   -e PRUNE=1 \
   -v borg-cache:/root/.cache/borg \
@@ -116,6 +117,8 @@ Description of all accepted environment variables follows.
 **ARCHIVE** - archive parameter for Borg repository. If empty, defaults to `$(date +%Y-%m-%d)`. For more info see [Borg documentation](https://borgbackup.readthedocs.io/en/stable/usage.html)
 
 **BACKUP_DIRS** - directories to back up
+
+**EXCLUDE** - paths/patterns to exclude from backup. Paths must be separated by `;`. For example: `-e EXCLUDE='/my path/one;/path two;*.tmp'`
 
 **BORG_PARAMS** - run custom borg command inside of the container. If this variable is set, default commands are not executed, only the one specified in *BORG_PARAMS*. For example `list` or `list ::2016-05-26`. In both examples, repo is not specified, because borg understands the `BORG_REPO` env var and uses it by default
 
