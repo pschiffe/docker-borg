@@ -56,8 +56,8 @@ else
     INIT_ENCRYPTION=''
 fi
 
-TODAY=$(date +%Y-%m-%d)
-ARCHIVE="${ARCHIVE:-$TODAY}"
+DEFAULT_ARCHIVE="${HOSTNAME}_$(date +%Y-%m-%d)"
+ARCHIVE="${ARCHIVE:-$DEFAULT_ARCHIVE}"
 
 if [ -n "${EXTRACT_TO:-}" ]; then
     mkdir -p "$EXTRACT_TO"
