@@ -114,7 +114,7 @@ Description of all accepted environment variables follows.
 
 **BORG_REPO** - repository location
 
-**ARCHIVE** - archive parameter for Borg repository. If empty, defaults to `$(date +%Y-%m-%d)`. For more info see [Borg documentation](https://borgbackup.readthedocs.io/en/stable/usage.html)
+**ARCHIVE** - archive parameter for Borg repository. If empty, defaults to `"${HOSTNAME}_$(date +%Y-%m-%d)"`. For more info see [Borg documentation](https://borgbackup.readthedocs.io/en/stable/usage.html)
 
 **BACKUP_DIRS** - directories to back up
 
