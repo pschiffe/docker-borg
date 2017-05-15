@@ -126,6 +126,8 @@ if [ -n "${PRUNE:-}" ]; then
     borg prune -v --stats --show-rc $PRUNE_PREFIX --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
 fi
 
-borg check -v --show-rc
+if [ "${BORG_SKIP_CHECK:-}" != '1' ] || [ "${BORG_SKIP_CHECK:-}" != "true" ]; then
+    borg check -v --show-rc
+fi
 
 quit
