@@ -1,6 +1,7 @@
 # Borg Docker Image
 
 [![](https://images.microbadger.com/badges/image/pschiffe/borg.svg)](http://microbadger.com/images/pschiffe/borg "Get your own image badge on microbadger.com")
+[![Docker Pulls](https://img.shields.io/docker/pulls/pschiffe/borg.svg)](https://hub.docker.com/r/pschiffe/borg/)
 
 Docker image with [BorgBackup](https://borgbackup.readthedocs.io/en/stable/) client utility and sshfs support. Borg is a deduplicating backup program supporting compresion and encryption. It's very efficient and doesn't need regular full backups while still supporting data pruning.
 
