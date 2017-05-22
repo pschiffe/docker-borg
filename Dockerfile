@@ -1,4 +1,4 @@
-FROM fedora:24
+FROM fedora:25
 MAINTAINER "Peter Schiffer" <pschiffe@redhat.com>
 
 RUN dnf -y --setopt=tsflags=nodocs install \
