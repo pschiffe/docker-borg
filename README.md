@@ -123,6 +123,8 @@ Description of all accepted environment variables follows.
 
 **BORG_PARAMS** - run custom borg command inside of the container. If this variable is set, default commands are not executed, only the one specified in *BORG_PARAMS*. For example `list` or `list ::2016-05-26`. In both examples, repo is not specified, because borg understands the `BORG_REPO` env var and uses it by default
 
+**BORG_SKIP_CHECK** - set to `1` if you want to skip the `borg check` command at the end of the backup
+
 ### Compression
 
 **COMPRESSION** - compression to use. Defaults to none. [More info](https://borgbackup.readthedocs.io/en/stable/usage.html#borg-create)
