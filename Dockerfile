@@ -1,7 +1,7 @@
-FROM fedora:25
+FROM fedora:27
 MAINTAINER "Peter Schiffer" <pschiffe@redhat.com>
 
-RUN dnf -y --setopt=tsflags=nodocs install \
+RUN dnf -y --setopt=install_weak_deps=False install \
         borgbackup \
         fuse-sshfs \
     && dnf clean all
