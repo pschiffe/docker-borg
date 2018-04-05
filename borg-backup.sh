@@ -53,7 +53,7 @@ if [ -z "${BORG_PASSPHRASE:-}" ]; then
     INIT_ENCRYPTION='--encryption=none'
     echoerr 'Not using encryption. If you want to encrypt your files, set $BORG_PASSPHRASE variable.'
 else
-    INIT_ENCRYPTION=''
+    INIT_ENCRYPTION='--encryption=repokey'
 fi
 
 DEFAULT_ARCHIVE="${HOSTNAME}_$(date +%Y-%m-%d)"
