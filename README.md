@@ -16,6 +16,7 @@ docker run \
   -e EXCLUDE='*/.cache*;*.tmp;/borg/data/etc/shadow' \
   -e COMPRESSION=lz4 \
   -e PRUNE=1 \
+  -v borg-config:/root/.config/borg \
   -v borg-cache:/root/.cache/borg \
   -v borg-repo:/borg/repo \
   -v /etc:/borg/data/etc:ro \
@@ -37,6 +38,7 @@ docker run \
   -e BACKUP_DIRS=/borg/data \
   -e COMPRESSION=lz4 \
   -e PRUNE=1 \
+  -v borg-config:/root/.config/borg \
   -v borg-cache:/root/.cache/borg \
   -v mariadb-data:/borg/data/mariadb:ro \
   -v worpdress-data:/borg/data/wordpress:ro \
@@ -53,6 +55,7 @@ docker run \
   -e BACKUP_DIRS=/borg/data \
   -e COMPRESSION=lz4 \
   -e PRUNE=1 \
+  -v borg-config:/root/.config/borg \
   -v borg-cache:/root/.cache/borg \
   -v mariadb-data:/borg/data/mariadb:ro \
   -v worpdress-data:/borg/data/wordpress:ro \
@@ -71,6 +74,7 @@ docker run \
   -e BACKUP_DIRS=/borg/data \
   -e COMPRESSION=lz4 \
   -e PRUNE=1 \
+  -v borg-config:/root/.config/borg \
   -v borg-cache:/root/.cache/borg \
   -v borg-ssh-key:/root/ssh-key \
   -v mariadb-data:/borg/data/mariadb:ro \
@@ -88,6 +92,7 @@ docker run \
   -e BORG_PASSPHRASE=my-secret-pw \
   -e EXTRACT_TO=/borg/restore \
   -e EXTRACT_WHAT=only/this/file \
+  -v borg-config:/root/.config/borg \
   -v borg-cache:/root/.cache/borg \
   -v /opt/restore:/borg/restore \
   --security-opt label:disable \
@@ -101,6 +106,7 @@ docker run \
   -e BORG_REPO='user@hostname:/path/to/repo' \
   -e BORG_PASSPHRASE=my-secret-pw \
   -e BORG_PARAMS='list ::2016-05-26' \
+  -v borg-config:/root/.config/borg \
   -v borg-cache:/root/.cache/borg \
   --name borg-backup \
   pschiffe/borg
