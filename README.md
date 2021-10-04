@@ -2,7 +2,7 @@
 
 [![](https://images.microbadger.com/badges/version/pschiffe/borg.svg)](https://microbadger.com/images/pschiffe/borg "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/pschiffe/borg.svg)](https://microbadger.com/images/pschiffe/borg "Get your own image badge on microbadger.com") [![Docker Pulls](https://img.shields.io/docker/pulls/pschiffe/borg.svg)](https://hub.docker.com/r/pschiffe/borg/)
 
-Docker image with [BorgBackup](https://borgbackup.readthedocs.io/en/stable/) client utility and sshfs support. Borg is a deduplicating backup program supporting compresion and encryption. It's very efficient and doesn't need regular full backups while still supporting data pruning.
+Docker image with [BorgBackup](https://borgbackup.readthedocs.io/en/stable/) client utility and sshfs support. Borg is a deduplicating archiver with compression and authenticated encryption. It's very efficient and doesn't need regular full backups while still supporting data pruning.
 
 ## Quick start
 
@@ -16,8 +16,7 @@ docker run \
   -e EXCLUDE='*/.cache*;*.tmp;/borg/data/etc/shadow' \
   -e COMPRESSION=lz4 \
   -e PRUNE=1 \
-  -v borg-config:/root/.config/borg \
-  -v borg-cache:/root/.cache/borg \
+  -v borg-config:/root \
   -v borg-repo:/borg/repo \
   -v /etc:/borg/data/etc:ro \
   -v /home:/borg/data/home:ro \
@@ -29,7 +28,7 @@ docker rm borg-backup
 
 ## More examples
 
-Backup docker volumes to remote location (Borg must be running in server mode in that remote location):
+Backup docker volumes to remote location (Borg must be running in server mode at that remote location):
 ```
 docker run \
   -e BORG_REPO='user@hostname:/path/to/repo' \
@@ -38,10 +37,9 @@ docker run \
   -e BACKUP_DIRS=/borg/data \
   -e COMPRESSION=lz4 \
   -e PRUNE=1 \
-  -v borg-config:/root/.config/borg \
-  -v borg-cache:/root/.cache/borg \
+  -v borg-config:/root \
   -v mariadb-data:/borg/data/mariadb:ro \
-  -v worpdress-data:/borg/data/wordpress:ro \
+  -v wordpress-data:/borg/data/wordpress:ro \
   --name borg-backup \
   pschiffe/borg
 ```
@@ -55,16 +53,15 @@ docker run \
   -e BACKUP_DIRS=/borg/data \
   -e COMPRESSION=lz4 \
   -e PRUNE=1 \
-  -v borg-config:/root/.config/borg \
-  -v borg-cache:/root/.cache/borg \
+  -v borg-config:/root \
   -v mariadb-data:/borg/data/mariadb:ro \
-  -v worpdress-data:/borg/data/wordpress:ro \
+  -v wordpress-data:/borg/data/wordpress:ro \
   --cap-add SYS_ADMIN --device /dev/fuse --security-opt label:disable \
   --name borg-backup \
   pschiffe/borg
 ```
 
-Using sshfs with ssh key authentification:
+Using sshfs with ssh key authentication:
 ```
 docker run \
   -e SSHFS='user@hostname:/path/to/repo' \
@@ -74,11 +71,9 @@ docker run \
   -e BACKUP_DIRS=/borg/data \
   -e COMPRESSION=lz4 \
   -e PRUNE=1 \
-  -v borg-config:/root/.config/borg \
-  -v borg-cache:/root/.cache/borg \
-  -v borg-ssh-key:/root/ssh-key \
+  -v borg-config:/root \
   -v mariadb-data:/borg/data/mariadb:ro \
-  -v worpdress-data:/borg/data/wordpress:ro \
+  -v wordpress-data:/borg/data/wordpress:ro \
   --cap-add SYS_ADMIN --device /dev/fuse --security-opt label:disable \
   --name borg-backup \
   pschiffe/borg
@@ -92,8 +87,7 @@ docker run \
   -e BORG_PASSPHRASE=my-secret-pw \
   -e EXTRACT_TO=/borg/restore \
   -e EXTRACT_WHAT=only/this/file \
-  -v borg-config:/root/.config/borg \
-  -v borg-cache:/root/.cache/borg \
+  -v borg-config:/root \
   -v /opt/restore:/borg/restore \
   --security-opt label:disable \
   --name borg-backup \
@@ -106,8 +100,7 @@ docker run \
   -e BORG_REPO='user@hostname:/path/to/repo' \
   -e BORG_PASSPHRASE=my-secret-pw \
   -e BORG_PARAMS='list ::2016-05-26' \
-  -v borg-config:/root/.config/borg \
-  -v borg-cache:/root/.cache/borg \
+  -v borg-config:/root \
   --name borg-backup \
   pschiffe/borg
 ```
@@ -132,11 +125,11 @@ Description of all accepted environment variables follows.
 
 ### Compression
 
-**COMPRESSION** - compression to use. Defaults to none. [More info](https://borgbackup.readthedocs.io/en/stable/usage.html#borg-create)
+**COMPRESSION** - compression to use. Defaults to lz4. [More info](https://borgbackup.readthedocs.io/en/stable/usage.html#borg-create)
 
 ### Encryption
 
-**BORG_PASSPHRASE** - `repokey` mode password to encrypt the backed up data. Defaults to none. Only the `repokey` mode encryption is supported by this Docker image. [More info](https://borgbackup.readthedocs.io/en/stable/usage.html#borg-init)
+**BORG_PASSPHRASE** - `repokey` mode password. Defaults to none. Only the `repokey` mode encryption is supported by this Docker image. [More info](https://borgbackup.readthedocs.io/en/stable/usage.html#borg-init)
 
 ### Extracting (restoring) files
 
@@ -164,4 +157,4 @@ Description of all accepted environment variables follows.
 
 **SSHFS_IDENTITY_FILE** - path to ssh key
 
-**SSHFS_GEN_IDENTITY_FILE** - if set, generates ssh key pair if *SSHFS_IDENTITY_FILE* is set, but the key file doesn't exist. 4096 bits long rsa key will be generated. After generating the key, the public part of the key is printed to stdout and the container stops, so you have the chance to configure the server part before running first backup
+**SSHFS_GEN_IDENTITY_FILE** - if set, generates ssh key pair if *SSHFS_IDENTITY_FILE* is set and the key file doesn't exist. After generating the key, the public part of the key is printed to stdout and the container stops, so you have the chance to configure the server part before creating the first backup
