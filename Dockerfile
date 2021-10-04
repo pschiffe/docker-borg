@@ -1,4 +1,4 @@
-FROM fedora:31
+FROM fedora:34
 
 RUN dnf -y --setopt=install_weak_deps=False install \
         borgbackup \
