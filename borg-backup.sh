@@ -37,7 +37,7 @@ if [ -n "${SSHFS:-}" ]; then
         SSHFS_PASSWORD_OPT=''
     fi
     mkdir -p /mnt/sshfs
-    eval "${SSHFS_PASSWORD} sshfs -o StrictHostKeyChecking=no ${SSHFS} /mnt/sshfs ${SSHFS_IDENTITY_FILE} ${SSHFS_PASSWORD_OPT}"
+    eval "${SSHFS_PASSWORD} sshfs ${SSHFS} /mnt/sshfs ${SSHFS_IDENTITY_FILE} ${SSHFS_PASSWORD_OPT}"
     BORG_REPO=/mnt/sshfs
 fi
 
