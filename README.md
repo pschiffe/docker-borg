@@ -1,6 +1,6 @@
 # Borg Docker Image
 
-[![](https://images.microbadger.com/badges/version/pschiffe/borg.svg)](https://microbadger.com/images/pschiffe/borg "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/pschiffe/borg.svg)](https://microbadger.com/images/pschiffe/borg "Get your own image badge on microbadger.com") [![Docker Pulls](https://img.shields.io/docker/pulls/pschiffe/borg.svg)](https://hub.docker.com/r/pschiffe/borg/)
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/pschiffe/borg/latest?label=latest) ![Docker Pulls](https://img.shields.io/docker/pulls/pschiffe/borg)
 
 Docker image with [BorgBackup](https://borgbackup.readthedocs.io/en/stable/) client utility and sshfs support. Borg is a deduplicating archiver with compression and authenticated encryption. It's very efficient and doesn't need regular full backups while still supporting data pruning.
 
