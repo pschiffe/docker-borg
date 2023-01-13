@@ -30,7 +30,7 @@ if [ -n "${SSHFS:-}" ]; then
         SSHFS_IDENTITY_FILE=''
     fi
     if [ -n "${SSHFS_PASSWORD:-}" ]; then
-        SSHFS_PASSWORD="echo ${SSHFS_PASSWORD} |"
+        SSHFS_PASSWORD="echo '${SSHFS_PASSWORD}' |"
         SSHFS_PASSWORD_OPT='-o password_stdin'
     else
         SSHFS_PASSWORD=''
