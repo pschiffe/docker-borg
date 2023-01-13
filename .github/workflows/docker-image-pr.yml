@@ -27,7 +27,7 @@ jobs:
           file: ./Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: false
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/borg:latest
+          tags: borg:latest
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
