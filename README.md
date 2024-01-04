@@ -2,11 +2,11 @@
 
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/pschiffe/borg/latest?label=latest) ![Docker Pulls](https://img.shields.io/docker/pulls/pschiffe/borg)
 
-Docker image with [BorgBackup](https://borgbackup.readthedocs.io/en/stable/) client utility and sshfs support. Borg is a deduplicating archiver with compression and authenticated encryption. It's very efficient and doesn't need regular full backups while still supporting data pruning.
+This Docker image includes the [BorgBackup](https://borgbackup.readthedocs.io/en/stable/) client utility and sshfs support. Borg is a deduplicating archiver with compression and authenticated encryption. It's very efficient, doesn't require regular full backups, and supports data pruning.
 
 ## Quick start
 
-First, pull the image to keep it up to date. Then create and run the borg backup container. In this quick start, the `/etc` and `/home` directories from the host are bind mounted to the container as read only. These are the directories which will be backed up. The backed up data will be stored in the `borg-repo` Docker volume, and the data will be protected with the `my-secret-pw` password. If the host is using SELinux, the `--security-opt label:disable` flag must be used, because we don't want to relabel the `/etc` and `/home` directories while we want the container to have access to them. After the backup is done, data will be pruned according to the default policy and checked for errors. Borg is running in a verbose mode within the container, so the detailed output from backup will be printed. At the end, the container is deleted. This is done by separate `docker rm` command, because the `--rm` option to the `docker run` would remove also the Docker volumes, and we don't want that. Deleting the container and pulling the image from registry every time keeps the container fresh every time the backup is run.
+First, pull the image to keep it up to date. Then create and run the borg backup container. In this quick start, the `/etc` and `/home` directories from the host are bind mounted to the container as read only. These are the directories which will be backed up. The backed up data will be stored in the `borg-repo` Docker volume, and the data will be protected with the `my-secret-pw` password. If the host is using SELinux, use the `--security-opt label:disable` flag. This is because we don't want to relabel the `/etc` and `/home` directories, but we do want the container to have access to them. After the backup is done, data will be pruned according to the default policy and checked for errors. Borg runs in verbose mode within the container, which means it will print detailed output from the backup. At the end, the container is deleted. This is done using a separate `docker rm` command. We do this because the `--rm` option in `docker run` would also remove the Docker volumes, which we don't want. By deleting the container and pulling the image from the registry each time, we ensure the container is fresh for each backup run.
 ```
 docker pull pschiffe/borg
 docker run \
@@ -44,7 +44,7 @@ docker run \
   pschiffe/borg
 ```
 
-Using sshfs (in case when the Borg is not installed on the remote location):
+Use sshfs if Borg is not installed on the remote location:
 ```
 docker run \
   -e SSHFS='user@hostname:/path/to/repo' \
@@ -79,7 +79,7 @@ docker run \
   pschiffe/borg
 ```
 
-Restoring files from specific day to folder on host:
+Restoring files from a specific day to a folder on the host:
 ```
 docker run \
   -e BORG_REPO='user@hostname:/path/to/repo' \
@@ -94,7 +94,7 @@ docker run \
   pschiffe/borg
 ```
 
-Running custom borg command:
+To run a custom Borg command, use the following syntax:
 ```
 docker run \
   -e BORG_REPO='user@hostname:/path/to/repo' \
