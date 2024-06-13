@@ -42,6 +42,7 @@ if [ -n "${SSHFS:-}" ]; then
 fi
 
 if [ -z "${BORG_REPO:-}" ]; then
+    # shellcheck disable=SC2016
     echoerr 'Variable $BORG_REPO is required. Please set it to the repository location.'
     quit 1
 fi
@@ -51,6 +52,7 @@ export BORG_REPO
 
 if [ -z "${BORG_PASSPHRASE:-}" ]; then
     INIT_ENCRYPTION='--encryption=none'
+    # shellcheck disable=SC2016
     echoerr 'Not using encryption. If you want to encrypt your files, set $BORG_PASSPHRASE variable.'
 else
     INIT_ENCRYPTION='--encryption=repokey'
@@ -62,21 +64,25 @@ ARCHIVE="${ARCHIVE:-$DEFAULT_ARCHIVE}"
 if [ -n "${EXTRACT_TO:-}" ]; then
     mkdir -p "$EXTRACT_TO"
     cd "$EXTRACT_TO"
+    # shellcheck disable=SC2086
     borg extract -v --list --show-rc ::"$ARCHIVE" ${EXTRACT_WHAT:-}
     quit
 fi
 
 if [ -n "${BORG_PARAMS:-}" ]; then
+    # shellcheck disable=SC2086
     borg $BORG_PARAMS
     quit
 fi
 
 if [ -z "${BACKUP_DIRS:-}" ]; then
+    # shellcheck disable=SC2016
     echoerr 'Variable $BACKUP_DIRS is required. Please fill it with directories you would like to backup.'
     quit 1
 fi
 
 # If the $BORG_REPO is a local path and the directory is empty, init it
+# shellcheck disable=SC2086
 if [ "${BORG_REPO:0:1}" == '/' ] && [ ! "$(ls -A $BORG_REPO)" ]; then
     INIT_REPO=1
 fi
@@ -105,6 +111,7 @@ else
     EXCLUDE_BORG=''
 fi
 
+# shellcheck disable=SC2086
 borg create -v --stats --show-rc $COMPRESSION $EXCLUDE_BORG ::"$ARCHIVE" $BACKUP_DIRS
 
 if [ -n "${PRUNE:-}" ]; then
@@ -123,6 +130,7 @@ if [ -n "${PRUNE:-}" ]; then
         KEEP_MONTHLY=6
     fi
 
+    # shellcheck disable=SC2086
     borg prune -v --stats --show-rc $PRUNE_PREFIX --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
 fi
 
