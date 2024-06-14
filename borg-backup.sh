@@ -18,6 +18,14 @@ function quit {
     exit 0
 }
 
+: "${DEBUG:=0}"
+: "${LOGGING_LEVEL:=--info}"
+
+if [ "${DEBUG}" -eq 1 ]; then
+    LOGGING_LEVEL='--debug'
+    set -x
+fi
+
 if [ -n "${SSHFS:-}" ]; then
     if [ -n "${SSHFS_IDENTITY_FILE:-}" ]; then
         if [ ! -f "$SSHFS_IDENTITY_FILE" ] && [ -n "${SSHFS_GEN_IDENTITY_FILE:-}" ]; then
@@ -47,6 +55,10 @@ if [ -z "${BORG_REPO:-}" ]; then
     quit 1
 fi
 
+if [ "${DEBUG}" -eq 1 ]; then
+    echoerr "BORG_REPO: $BORG_REPO"
+fi
+
 # Borg just needs this
 export BORG_REPO
 
@@ -65,13 +77,13 @@ if [ -n "${EXTRACT_TO:-}" ]; then
     mkdir -p "$EXTRACT_TO"
     cd "$EXTRACT_TO"
     # shellcheck disable=SC2086
-    borg extract -v --list --show-rc ::"$ARCHIVE" ${EXTRACT_WHAT:-}
+    borg extract --list --show-rc $LOGGING_LEVEL ::"$ARCHIVE" ${EXTRACT_WHAT:-}
     quit
 fi
 
 if [ -n "${BORG_PARAMS:-}" ]; then
     # shellcheck disable=SC2086
-    borg $BORG_PARAMS
+    borg $LOGGING_LEVEL $BORG_PARAMS
     quit
 fi
 
@@ -88,7 +100,8 @@ if [ "${BORG_REPO:0:1}" == '/' ] && [ ! "$(ls -A $BORG_REPO)" ]; then
 fi
 
 if [ -n "${INIT_REPO:-}" ]; then
-    borg init -v --show-rc $INIT_ENCRYPTION
+    # shellcheck disable=SC2086
+    borg init --show-rc $LOGGING_LEVEL $INIT_ENCRYPTION
 fi
 
 if [ -n "${COMPRESSION:-}" ]; then
@@ -112,7 +125,7 @@ else
 fi
 
 # shellcheck disable=SC2086
-borg create -v --stats --show-rc $COMPRESSION $EXCLUDE_BORG ::"$ARCHIVE" $BACKUP_DIRS
+borg create --stats --show-rc $LOGGING_LEVEL $COMPRESSION $EXCLUDE_BORG ::"$ARCHIVE" $BACKUP_DIRS
 
 if [ -n "${PRUNE:-}" ]; then
     if [ -n "${PRUNE_PREFIX:-}" ]; then
@@ -131,11 +144,12 @@ if [ -n "${PRUNE:-}" ]; then
     fi
 
     # shellcheck disable=SC2086
-    borg prune -v --stats --show-rc $PRUNE_PREFIX --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
+    borg prune --stats --show-rc $LOGGING_LEVEL $PRUNE_PREFIX --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
 fi
 
 if [ "${BORG_SKIP_CHECK:-}" != '1' ] && [ "${BORG_SKIP_CHECK:-}" != "true" ]; then
-    borg check -v --show-rc
+    # shellcheck disable=SC2086
+    borg check --show-rc $LOGGING_LEVEL
 fi
 
 quit

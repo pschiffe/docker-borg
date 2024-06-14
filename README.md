@@ -167,3 +167,9 @@ Description of all accepted environment variables follows.
 **SSHFS_IDENTITY_FILE** - path to ssh key
 
 **SSHFS_GEN_IDENTITY_FILE** - if set, generates ssh key pair if *SSHFS_IDENTITY_FILE* is set and the key file doesn't exist. After generating the key, the public part of the key is printed to stdout and the container stops, so you have the chance to configure the server part before creating the first backup
+
+### Logging
+
+**LOGGING_LEVEL** - Borg's [logging level](https://borgbackup.readthedocs.io/en/stable/usage/general.html#logging), defaults to `--info`
+
+**DEBUG** - enable debug mode, `0` or `1`, defaults to `0`
