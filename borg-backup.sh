@@ -44,8 +44,13 @@ if [ -n "${SSHFS:-}" ]; then
         SSHFS_PASSWORD=''
         SSHFS_PASSWORD_OPT=''
     fi
+    if [ "${DEBUG}" -eq 1 ]; then
+        SSHFS_DEBUG_OPT='--debug -o debug,sshfs_debug,loglevel=debug'
+    else
+        SSHFS_DEBUG_OPT=''
+    fi
     mkdir -p /mnt/sshfs
-    eval "${SSHFS_PASSWORD} sshfs ${SSHFS} /mnt/sshfs ${SSHFS_IDENTITY_FILE} ${SSHFS_PASSWORD_OPT}"
+    eval "${SSHFS_PASSWORD} sshfs ${SSHFS_DEBUG_OPT} ${SSHFS} /mnt/sshfs ${SSHFS_IDENTITY_FILE} ${SSHFS_PASSWORD_OPT}"
     BORG_REPO=/mnt/sshfs
 fi
 
