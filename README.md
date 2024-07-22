@@ -173,3 +173,5 @@ Description of all accepted environment variables follows.
 **LOGGING_LEVEL** - Borg's [logging level](https://borgbackup.readthedocs.io/en/stable/usage/general.html#logging), defaults to `--info`
 
 **DEBUG** - enable debug mode, `0` or `1`, defaults to `0`
+
+**SHOW_PROGRESS** - show Borg's progress information, `0` or `1`, defaults to `0`

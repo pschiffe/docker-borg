@@ -26,6 +26,10 @@ if [ "${DEBUG}" -eq 1 ]; then
     set -x
 fi
 
+if [ "${SHOW_PROGRESS:=0}" -eq 1 ]; then
+    PROGRESS='--progress'
+fi
+
 if [ -n "${SSHFS:-}" ]; then
     if [ -n "${SSHFS_IDENTITY_FILE:-}" ]; then
         if [ ! -f "$SSHFS_IDENTITY_FILE" ] && [ -n "${SSHFS_GEN_IDENTITY_FILE:-}" ]; then
@@ -82,13 +86,13 @@ if [ -n "${EXTRACT_TO:-}" ]; then
     mkdir -p "$EXTRACT_TO"
     cd "$EXTRACT_TO"
     # shellcheck disable=SC2086
-    borg extract --list --show-rc $LOGGING_LEVEL ::"$ARCHIVE" ${EXTRACT_WHAT:-}
+    borg extract --list --show-rc $LOGGING_LEVEL $PROGRESS ::"$ARCHIVE" ${EXTRACT_WHAT:-}
     quit
 fi
 
 if [ -n "${BORG_PARAMS:-}" ]; then
     # shellcheck disable=SC2086
-    borg $LOGGING_LEVEL $BORG_PARAMS
+    borg $LOGGING_LEVEL $PROGRESS $BORG_PARAMS
     quit
 fi
 
@@ -130,7 +134,7 @@ else
 fi
 
 # shellcheck disable=SC2086
-borg create --stats --show-rc $LOGGING_LEVEL $COMPRESSION $EXCLUDE_BORG ::"$ARCHIVE" $BACKUP_DIRS
+borg create --stats --show-rc $LOGGING_LEVEL $PROGRESS $COMPRESSION $EXCLUDE_BORG ::"$ARCHIVE" $BACKUP_DIRS
 
 if [ -n "${PRUNE:-}" ]; then
     if [ -n "${PRUNE_PREFIX:-}" ]; then
@@ -149,12 +153,12 @@ if [ -n "${PRUNE:-}" ]; then
     fi
 
     # shellcheck disable=SC2086
-    borg prune --stats --show-rc $LOGGING_LEVEL $PRUNE_PREFIX --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
+    borg prune --stats --show-rc $LOGGING_LEVEL $PROGRESS $PRUNE_PREFIX --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
 fi
 
 if [ "${BORG_SKIP_CHECK:-}" != '1' ] && [ "${BORG_SKIP_CHECK:-}" != "true" ]; then
     # shellcheck disable=SC2086
-    borg check --show-rc $LOGGING_LEVEL
+    borg check --show-rc $LOGGING_LEVEL $PROGRESS
 fi
 
 quit
