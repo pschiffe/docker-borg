@@ -28,6 +28,8 @@ fi
 
 if [ "${SHOW_PROGRESS:=0}" -eq 1 ]; then
     PROGRESS='--progress'
+else
+    PROGRESS=''
 fi
 
 if [ -n "${SSHFS:-}" ]; then
