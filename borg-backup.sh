@@ -156,6 +156,8 @@ if [ -n "${PRUNE:-}" ]; then
 
     # shellcheck disable=SC2086
     borg prune --stats --show-rc $LOGGING_LEVEL $PROGRESS $PRUNE_PREFIX --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
+    # shellcheck disable=SC2086
+    borg compact --cleanup-commits --show-rc $LOGGING_LEVEL $PROGRESS
 fi
 
 if [ "${BORG_SKIP_CHECK:-}" != '1' ] && [ "${BORG_SKIP_CHECK:-}" != "true" ]; then
