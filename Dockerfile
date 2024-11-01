@@ -1,4 +1,4 @@
-FROM fedora:40
+FROM fedora:41
 
 RUN echo 'install_weak_deps=False' >> /etc/dnf/dnf.conf \
   && echo 'assumeyes=True' >> /etc/dnf/dnf.conf \
@@ -9,7 +9,7 @@ RUN echo 'install_weak_deps=False' >> /etc/dnf/dnf.conf \
     fuse-sshfs \
   && dnf clean all
 
-ENV LANG en_US.UTF-8
+ENV LANG=en_US.UTF-8
 
 COPY borg-backup.sh /
 
