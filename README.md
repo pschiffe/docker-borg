@@ -150,7 +150,9 @@ Description of all accepted environment variables follows.
 
 **PRUNE** - if set, prune the repository after backup. Empty by default. [More info](https://borgbackup.readthedocs.io/en/stable/usage.html#borg-prune)
 
-**PRUNE_PREFIX** - filter data to prune by prefix of the archive. Empty by default - prune all data
+**GLOB** - filter data to prune by prefix of the archive. Empty by default - prune all data 
+
+**PRUNE_PREFIX** - filter data to prune by prefix of the archive. Empty by default - prune all data (DEPRECATED, use **GLOB** instead)
 
 **KEEP_DAILY** - keep specified number of daily backups. Defaults to 7
 
