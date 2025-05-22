@@ -144,6 +144,11 @@ if [ -n "${PRUNE:-}" ]; then
     else
         PRUNE_PREFIX=''
     fi
+    if [ -n "${GLOB:-}" ]; then
+        GLOB="--glob-archives=${GLOB}"
+    else
+        GLOB=''
+    fi
     if [ -z "${KEEP_DAILY:-}" ]; then
         KEEP_DAILY=7
     fi
@@ -155,7 +160,7 @@ if [ -n "${PRUNE:-}" ]; then
     fi
 
     # shellcheck disable=SC2086
-    borg prune --stats --show-rc $LOGGING_LEVEL $PROGRESS $PRUNE_PREFIX --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
+    borg prune --stats --show-rc $LOGGING_LEVEL $PROGRESS $PRUNE_PREFIX $GLOB --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
     # shellcheck disable=SC2086
     borg compact --cleanup-commits --show-rc $LOGGING_LEVEL $PROGRESS
 fi
