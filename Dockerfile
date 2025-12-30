@@ -1,4 +1,4 @@
-FROM fedora:42
+FROM fedora:43
 
 RUN echo 'install_weak_deps=False' >> /etc/dnf/dnf.conf \
   && echo 'assumeyes=True' >> /etc/dnf/dnf.conf \
