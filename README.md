@@ -114,6 +114,14 @@ docker run \
   pschiffe/borg
 ```
 
+## Volumes
+
+The following Docker volumes are used by the examples.
+
+**borg-config:/root** - persistent Borg home directory. Stores Borg configuration and cache (`/root/.config/borg`, `/root/.cache/borg`) and SSH data (for example generated keys). Keep this volume across runs so this state survives container recreation.
+
+**borg-repo:/borg/repo** - local Borg repository storage. Use this when storing backups in a Docker volume instead of a remote repository.
+
 ## Environment variables
 
 Description of all accepted environment variables follows.
